@@ -6,7 +6,7 @@
 
 import dash
 from dash import dcc
-from dash import html
+from dash import html,ctx
 from dash.dependencies import Input, Output
 import pandas as pd
 import plotly.graph_objs as go
@@ -39,14 +39,14 @@ app.layout = html.Div([
         html.Label("Select Statistics:"),
         dcc.Dropdown(
             id='dropdown-statistics',
-            options='dropdown_options',
+            options=dropdown_options,
             value='Select Statistics',
         )
     ]),
     html.Div(dcc.Dropdown(
             id='select-year',
             options=[{'label': i, 'value': i} for i in year_list],
-            value='Select Year'
+            value='Select-year'
         )),
     html.Div([#TASK 2.3: Add a division for output display
     html.Div(id='output-container', className='chart-grid', style={'display': 'flex'})])
@@ -70,7 +70,7 @@ def update_input_container(selected_statistics):
     [Input(component_id='dropdown-statistics', component_property='value'), Input(component_id='select-year', component_property='value')])
 
 
-def update_output_container(input_year, selected_statistics):
+def update_output_container(selected_statistics, input_year):
     if selected_statistics == 'Recession Period Statistics':
         # Filter the data for recession periods
         recession_data = data[data['Recession'] == 1]
