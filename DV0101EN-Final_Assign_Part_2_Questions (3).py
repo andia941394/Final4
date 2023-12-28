@@ -88,20 +88,18 @@ def update_output_container(selected_statistics, input_year):
 
 #Plot 2 Calculate the average number of vehicles sold by vehicle type       
         # use groupby to create relevant data for plotting
-        average_sales =data.groupby(['Year','Vehicle_Type'])['Automobile_Sales'].mean().reset_index()
+        average_sales =recession_data.groupby('Vehicle_Type')['Automobile_Sales'].mean().reset_index()
         R_chart2  = dcc.Graph(
             figure=px.bar(average_sales,
-                x='Year',
+                x='Vehicle_Type',
                 y='Automobile_Sales',
-                color='Vehicle_Type',
-                labels={'Year': 'Year', 'Automobile_Sales': 'Sales'},
-                title = "Average number of vehicles sold by vehicle type{}".format(input_year)))
+                title = "Average Vehicle Sales for Each Vehicle Category"))
         
 # Plot 3 Pie chart for total expenditure share by vehicle type during recessions
         # use groupby to create relevant data for plotting
         exp_rec= recession_data.groupby('Vehicle_Type')['Advertising_Expenditure'].sum().reset_index()
         R_chart3 = dcc.Graph(
-            figure=px.Pie(exp_rec,
+            figure=px.pie(exp_rec,
                  values='Advertising_Expenditure',
                  names='Vehicle_Type',
                  title="Expenditure share by vehicle type during recessions")) 
@@ -142,12 +140,10 @@ def update_output_container(selected_statistics, input_year):
                 title="Total Monthly Automobile sales"))
 
             # Plot bar chart for average number of vehicles sold during the given year
-        avr_vdata=yearly_data.groupby(['Year', 'Month'])['Automobile_Sales'].mean().reset_index()
+        avr_vdata=data.groupby('Vehicle_Type')['Automobile_Sales'].mean().reset_index()
         Y_chart3 = dcc.Graph( figure = px.bar (avr_vdata,
-                x = 'Month',
+                x = 'Vehicle_Type',
                 y = 'Automobile_Sales',
-                color='Year',
-                labels={'Month': 'Month in Year', 'Automobile_Sales': 'Average Sales'},
                 title="Average Vehicles Sold by Vehicle Type in the year {}".format(input_year)))
 
             # Total Advertisement Expenditure for each vehicle using pie chart
